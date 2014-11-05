@@ -1,0 +1,2 @@
+bin/influxdb
+etc/influxdb/config.toml
