@@ -1,25 +1,25 @@
-# $FreeBSD: databases/influxdb/Makefile 365753 2014-08-23 16:23:12Z rschoof $
+# $FreeBSD: databases/influxdb/Makefile rschoof $
 
-PORTNAME= influxdb
-PORTVERSION= 0.8.5
-CATEGORIES= databases
+PORTNAME=       influxdb
+PORTVERSION=    0.8.5
+CATEGORIES=     databases
 
-MAINTAINER=    reinier@skoef.nl
-COMMENT=       Open-source distributed time series database
+MAINTAINER=     reinier@skoef.nl
+COMMENT=        Open-source distributed time series database
 
-LICENSE=       MIT
+LICENSE=        MIT
 
-USE_GITHUB= yes
-GH_ACCOUNT= influxdb
-GH_COMMIT=  9485e99
-GH_TAGNAME= ${GH_COMMIT}
+USE_GITHUB=     yes
+GH_ACCOUNT=     influxdb
+GH_COMMIT=      9485e99
+GH_TAGNAME=     ${GH_COMMIT}
 
 GNU_CONFIGURE=  yes
 
-PKGORIGIN=     databases/influxdb
-USE_AUTOTOOLS= autoconf
+PKGORIGIN=      databases/influxdb
+USE_AUTOTOOLS=  autoconf
 
-LIB_DEPENDS+= libleveldb.so:${PORTSDIR}/databases/leveldb
+LIB_DEPENDS+=   libleveldb.so:${PORTSDIR}/databases/leveldb
 BUILD_DEPENDS+= go:${PORTSDIR}/lang/go
 BUILD_DEPENDS+= protoc:${PORTSDIR}/devel/protobuf
 BUILD_DEPENDS+= hg:${PORTSDIR}/devel/mercurial
@@ -39,7 +39,7 @@ pre-build:
 
 do-build:
 	@cd ${BUILDSRC}; \
-    ${GMAKE} pre_build ; \
+	${GMAKE} pre_build ; \
 	CC=clang GOPATH=${WRKSRC} CGO_LDFLAGS=-L${PREFIX}/lib CGO_CFLAGS="-I${PREFIX}/include -DMDB_DSYNC=O_SYNC" ${GMAKE} parser valgrind binary_package
 
 do-install:
