@@ -29,7 +29,7 @@ BUILD_DEPENDS+= svn:${PORTSDIR}/devel/subversion
 
 USE_RC_SUBR=    influxdb
 
-USES= bison:build gmake:build
+USES= bison:build gmake
 
 BUILDSRC=${WRKSRC}/src/github.com/${GH_ACCOUNT}/${PORTNAME}
 
