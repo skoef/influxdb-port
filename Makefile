@@ -20,6 +20,7 @@ PKGORIGIN=     databases/influxdb
 USE_AUTOTOOLS= autoconf
 
 LIB_DEPENDS+= libleveldb.so:${PORTSDIR}/databases/leveldb
+BUILD_DEPENDS+= go:${PORTSDIR}/lang/go
 BUILD_DEPENDS+= protoc:${PORTSDIR}/devel/protobuf
 BUILD_DEPENDS+= hg:${PORTSDIR}/devel/mercurial
 BUILD_DEPENDS+= bzr:${PORTSDIR}/devel/bzr
@@ -27,6 +28,8 @@ BUILD_DEPENDS+= git:${PORTSDIR}/devel/git
 BUILD_DEPENDS+= svn:${PORTSDIR}/devel/subversion
 
 USE_RC_SUBR=    influxdb
+
+USES= bison:build gmake:build
 
 BUILDSRC=${WRKSRC}/src/github.com/${GH_ACCOUNT}/${PORTNAME}
 
