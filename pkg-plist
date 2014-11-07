@@ -1,2 +1,50 @@
 bin/influxdb
-etc/influxdb/config.toml
+%%ETCDIR%%/config.toml
+%%DATADIR%%/admin/fonts/FontAwesome.otf
+%%DATADIR%%/admin/fonts/font-mfizz.eot
+%%DATADIR%%/admin/fonts/font-mfizz.svg
+%%DATADIR%%/admin/fonts/font-mfizz.ttf
+%%DATADIR%%/admin/fonts/font-mfizz.woff
+%%DATADIR%%/admin/fonts/fontawesome-webfont.eot
+%%DATADIR%%/admin/fonts/fontawesome-webfont.svg
+%%DATADIR%%/admin/fonts/fontawesome-webfont.ttf
+%%DATADIR%%/admin/fonts/fontawesome-webfont.woff
+%%DATADIR%%/admin/help/queries.html
+%%DATADIR%%/admin/images/favicon.ico
+%%DATADIR%%/admin/images/influxdb-light-24px.png
+%%DATADIR%%/admin/index.html
+%%DATADIR%%/admin/interfaces/default/index.html
+%%DATADIR%%/admin/javascripts/admin.js
+%%DATADIR%%/admin/javascripts/all.js
+%%DATADIR%%/admin/javascripts/interfaces/default.js
+%%DATADIR%%/admin/javascripts/vendor/angular-cookies.js
+%%DATADIR%%/admin/javascripts/vendor/angular.js
+%%DATADIR%%/admin/javascripts/vendor/custom.modernizr.js
+%%DATADIR%%/admin/javascripts/vendor/d3-3.4.11.min.js
+%%DATADIR%%/admin/javascripts/vendor/foundation.min.js
+%%DATADIR%%/admin/javascripts/vendor/influxdb-0.1.6.js
+%%DATADIR%%/admin/javascripts/vendor/jquery-2.0.3.js
+%%DATADIR%%/admin/javascripts/vendor/jquery.magnific-popup.min.js
+%%DATADIR%%/admin/stylesheets/all.css
+%%DATADIR%%/admin/stylesheets/font-mfizz.css
+%%DATADIR%%/admin/stylesheets/foundation.css
+%%DATADIR%%/admin/stylesheets/highlighting.css
+%%DATADIR%%/admin/stylesheets/interfaces/default.css
+%%DATADIR%%/admin/stylesheets/magnific-popup.css
+%%DATADIR%%/admin/stylesheets/modal-help.css
+%%DATADIR%%/admin/stylesheets/normalize.css
+%%DATADIR%%/admin/stylesheets/vendor/font-awesome-4.1.0.min.css
+@dir %%ETCDIR%%
+@dir %%DATADIR%%/admin/fonts
+@dir %%DATADIR%%/admin/help
+@dir %%DATADIR%%/admin/images
+@dir %%DATADIR%%/admin/interfaces/default
+@dir %%DATADIR%%/admin/interfaces
+@dir %%DATADIR%%/admin/javascripts/interfaces
+@dir %%DATADIR%%/admin/javascripts/vendor
+@dir %%DATADIR%%/admin/javascripts
+@dir %%DATADIR%%/admin/stylesheets/interfaces
+@dir %%DATADIR%%/admin/stylesheets/vendor
+@dir %%DATADIR%%/admin/stylesheets
+@dir %%DATADIR%%/admin
+@dir %%DATADIR%%
