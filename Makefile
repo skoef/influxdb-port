@@ -30,48 +30,58 @@ USE_RC_SUBR=    influxdb
 
 USES=			bison:build gmake
 
-NO_CHECKSUM=1
-
 GO_PKGNAME= github.com/influxdb/influxdb
 CGO_CFLAGS=-DMDB_DSYNC=O_SYNC
+TMP_WRKDIR=work.tmp/src/
+GO_DEPENDS= github.com/rakyll/statik \
+			github.com/BurntSushi/toml \
+			github.com/influxdb/go-cache \
+			github.com/kimor79/gollectd \
+			github.com/bmizerany/pat \
+			github.com/dgnorton/goback \
+			github.com/gorilla/mux \
+			github.com/gorilla/context \
+			github.com/influxdb/gomdb \
+			github.com/jmhodges/levigo \
+			code.google.com/p/gogoprotobuf \
+			launchpad.net/gocheck \
+			code.google.com/p/go.crypto \
+			code.google.com/p/goprotobuf \
+			code.google.com/p/log4go
 
-TMP_WRKDIR=${WRKDIR}/../work.tmp
+${TMP_WRKDIR}github.com/rakyll/statik \
+${TMP_WRKDIR}github.com/BurntSushi/toml \
+${TMP_WRKDIR}github.com/influxdb/go-cache \
+${TMP_WRKDIR}github.com/kimor79/gollectd \
+${TMP_WRKDIR}github.com/bmizerany/pat \
+${TMP_WRKDIR}github.com/dgnorton/goback \
+${TMP_WRKDIR}github.com/gorilla/mux \
+${TMP_WRKDIR}github.com/gorilla/context \
+${TMP_WRKDIR}github.com/influxdb/gomdb \
+${TMP_WRKDIR}github.com/jmhodges/levigo \
+${TMP_WRKDIR}code.google.com/p/gogoprotobuf:
+	@${ECHO} "===> Fetching dependency ${@:S,${TMP_WRKDIR},,}"
+	@${MKDIR} $@
+	@git clone https://${@:S,${TMP_WRKDIR},,} ${@} 2>/dev/null
+${TMP_WRKDIR}launchpad.net/gocheck:
+	@${ECHO} "===> Fetching dependency ${@:S,${TMP_WRKDIR},,}"
+	@${MKDIR} ${@:H}
+	@bzr branch https://${@:S,${TMP_WRKDIR},,} ${@} 2>/dev/null
+${TMP_WRKDIR}code.google.com/p/go.crypto \
+${TMP_WRKDIR}code.google.com/p/goprotobuf \
+${TMP_WRKDIR}code.google.com/p/log4go:
+	@${ECHO} "===> Fetching dependency ${@:S,${TMP_WRKDIR},,}"
+	@${MKDIR} ${@:H}
+	@hg -q clone https://${@:S,${TMP_WRKDIR},,} ${@} 2>/dev/null
+
+post-fetch: ${GO_DEPENDS:S,^,${TMP_WRKDIR},g}
 pre-clean:
 	@${RM} -r ${TMP_WRKDIR}
-
-post-fetch:
-.for I in github.com/rakyll/statik \
-	github.com/BurntSushi/toml \
-	github.com/influxdb/go-cache \
-	github.com/kimor79/gollectd \
-	github.com/bmizerany/pat \
-	github.com/dgnorton/goback \
-	github.com/gorilla/mux \
-	github.com/gorilla/context \
-	github.com/influxdb/gomdb \
-	github.com/jmhodges/levigo \
-	code.google.com/p/gogoprotobuf
-	@${MKDIR} ${TMP_WRKDIR}/src/${I}
-	@${ECHO} "===> Fetching dependency ${I}"
-	@git clone https://${I} ${TMP_WRKDIR}/src/${I} 2>/dev/null
-.endfor
-.for I in launchpad.net/gocheck
-	@${MKDIR} ${TMP_WRKDIR}/src/${I:H}
-	@${ECHO} "===> Fetching dependency ${I}"
-	@bzr branch https://${I} ${TMP_WRKDIR}/src/${I} 2>/dev/null
-.endfor
-.for I in code.google.com/p/go.crypto \
-	code.google.com/p/goprotobuf \
-	code.google.com/p/log4go
-	@${MKDIR} ${TMP_WRKDIR}/src/${I:H}
-	@${ECHO} "===> Fetching dependency ${I}"
-	@hg -q clone https://${I} ${TMP_WRKDIR}/src/${I} 2>/dev/null
-.endfor
 
 post-extract:
 	@${MKDIR} ${GO_WRKSRC:H}
 	@${LN} -sf ${WRKSRC} ${GO_WRKSRC}
-	@${CP} -a ${TMP_WRKDIR}/* ${WRKDIR}
+	@${CP} -a ${TMP_WRKDIR}/* ${WRKDIR}/src
 	@${RM} -r ${TMP_WRKDIR}
 
 pre-build:
