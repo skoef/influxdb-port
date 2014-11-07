@@ -22,6 +22,7 @@ USE_AUTOTOOLS=  autoconf
 LIB_DEPENDS+=   libleveldb.so:${PORTSDIR}/databases/leveldb
 BUILD_DEPENDS+= go:${PORTSDIR}/lang/go
 BUILD_DEPENDS+= protoc:${PORTSDIR}/devel/protobuf
+BUILD_DEPENDS+= protoc-gen-go:${PORTSDIR}/devel/goprotobuf
 FETCH_DEPENDS+= bzr:${PORTSDIR}/devel/bzr
 FETCH_DEPENDS+= git:${PORTSDIR}/devel/git
 FETCH_DEPENDS+= hg:${PORTSDIR}/devel/mercurial
@@ -32,7 +33,7 @@ USES=			bison:build gmake
 
 GO_PKGNAME= github.com/influxdb/influxdb
 CGO_CFLAGS=-DMDB_DSYNC=O_SYNC
-TMP_WRKDIR=work.tmp/src/
+TMP_WRKDIR= ${WRKDIR}/../work.tmp/src/
 GO_DEPENDS= github.com/rakyll/statik \
 			github.com/BurntSushi/toml \
 			github.com/influxdb/go-cache \
@@ -49,35 +50,10 @@ GO_DEPENDS= github.com/rakyll/statik \
 			code.google.com/p/goprotobuf \
 			code.google.com/p/log4go
 
-${TMP_WRKDIR}github.com/rakyll/statik \
-${TMP_WRKDIR}github.com/BurntSushi/toml \
-${TMP_WRKDIR}github.com/influxdb/go-cache \
-${TMP_WRKDIR}github.com/kimor79/gollectd \
-${TMP_WRKDIR}github.com/bmizerany/pat \
-${TMP_WRKDIR}github.com/dgnorton/goback \
-${TMP_WRKDIR}github.com/gorilla/mux \
-${TMP_WRKDIR}github.com/gorilla/context \
-${TMP_WRKDIR}github.com/influxdb/gomdb \
-${TMP_WRKDIR}github.com/jmhodges/levigo \
-${TMP_WRKDIR}code.google.com/p/gogoprotobuf:
-	@${ECHO} "===> Fetching dependency ${@:S,${TMP_WRKDIR},,}"
-	@${MKDIR} $@
-	@git clone https://${@:S,${TMP_WRKDIR},,} ${@} 2>/dev/null
-${TMP_WRKDIR}launchpad.net/gocheck:
-	@${ECHO} "===> Fetching dependency ${@:S,${TMP_WRKDIR},,}"
-	@${MKDIR} ${@:H}
-	@bzr branch https://${@:S,${TMP_WRKDIR},,} ${@} 2>/dev/null
-${TMP_WRKDIR}code.google.com/p/go.crypto \
-${TMP_WRKDIR}code.google.com/p/goprotobuf \
-${TMP_WRKDIR}code.google.com/p/log4go:
-	@${ECHO} "===> Fetching dependency ${@:S,${TMP_WRKDIR},,}"
-	@${MKDIR} ${@:H}
-	@hg -q clone https://${@:S,${TMP_WRKDIR},,} ${@} 2>/dev/null
-
-post-fetch: ${GO_DEPENDS:S,^,${TMP_WRKDIR},g}
 pre-clean:
 	@${RM} -r ${TMP_WRKDIR}
 
+pre-fetch: post-fetch
 post-extract:
 	@${MKDIR} ${GO_WRKSRC:H}
 	@${LN} -sf ${WRKSRC} ${GO_WRKSRC}
@@ -108,3 +84,31 @@ do-install:
 .include <bsd.port.pre.mk>
 .include "${PORTSDIR}/lang/go/files/bsd.go.mk"
 .include <bsd.port.post.mk>
+
+${TMP_WRKDIR}github.com/rakyll/statik \
+${TMP_WRKDIR}github.com/BurntSushi/toml \
+${TMP_WRKDIR}github.com/influxdb/go-cache \
+${TMP_WRKDIR}github.com/kimor79/gollectd \
+${TMP_WRKDIR}github.com/bmizerany/pat \
+${TMP_WRKDIR}github.com/dgnorton/goback \
+${TMP_WRKDIR}github.com/gorilla/mux \
+${TMP_WRKDIR}github.com/gorilla/context \
+${TMP_WRKDIR}github.com/influxdb/gomdb \
+${TMP_WRKDIR}github.com/jmhodges/levigo \
+${TMP_WRKDIR}code.google.com/p/gogoprotobuf:
+	@${ECHO} "===> Fetching dependency ${@:S,${TMP_WRKDIR},,}"
+	@${MKDIR} $@
+	@git clone https://${@:S,${TMP_WRKDIR},,} ${@} 2>/dev/null
+${TMP_WRKDIR}launchpad.net/gocheck:
+	@${ECHO} "===> Fetching dependency ${@:S,${TMP_WRKDIR},,}"
+	@${MKDIR} ${@:H}
+	@bzr branch https://${@:S,${TMP_WRKDIR},,} ${@} 2>/dev/null
+${TMP_WRKDIR}code.google.com/p/go.crypto \
+${TMP_WRKDIR}code.google.com/p/goprotobuf \
+${TMP_WRKDIR}code.google.com/p/log4go:
+	@${ECHO} "===> Fetching dependency ${@:S,${TMP_WRKDIR},,}"
+	@${MKDIR} ${@:H}
+	@hg -q clone https://${@:S,${TMP_WRKDIR},,} ${@} 2>/dev/null
+
+post-fetch: ${GO_DEPENDS:S,^,${TMP_WRKDIR},g}
+
