@@ -10,7 +10,7 @@
 # to configure influxdb.
 # influxdb_enable (bool):   Set to "NO" by default.
 #           Set it to "YES" to enable influxdb.
-# influxdb_config (str):    Default to "/usr/local/etc/influxdb/config.toml"
+# influxdb_config (str):    Default to "%%ETCDIR%%/influxdb/config.toml"
 #           Configuration file.
 #
 
@@ -22,10 +22,10 @@ rcvar=influxdb_enable
 load_rc_config $name
 
 : ${influxdb_enable="NO"}
-: ${influxdb_config="/usr/local/etc/influxdb/config.toml"}
+: ${influxdb_config="%%ETCDIR%%/influxdb/config.toml"}
 
 command="/usr/sbin/daemon"
-procname="/usr/local/bin/influxdb"
+procname="%%PREFIX%%/bin/influxdb"
 command_args="-c -f -- ${procname} -config ${influxdb_config}"
 
 run_rc_command "$1"

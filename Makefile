@@ -50,6 +50,22 @@ GO_DEPENDS= github.com/rakyll/statik \
 			code.google.com/p/goprotobuf \
 			code.google.com/p/log4go
 
+OPTIONS_DEFINE= COLLECTD_PROXY
+OPTIONS_DEFAULT= COLLECTD_PROXY
+
+COLLECTD_PROXY_DESC= include collectdb-InfluxDB proxy
+
+COLLECTD_PROXY_DEPENDS= github.com/hoonmin/influxdb-collectd-proxy \
+						github.com/paulhammond/gocollectd
+
+.include <bsd.port.options.mk>
+
+.if ${PORT_OPTIONS:MCOLLECTD_PROXY}
+GO_DEPENDS+= ${COLLECTD_PROXY_DEPENDS}
+PLIST_FILES+= bin/influxdb-collectd-proxy
+USE_RC_SUBR+= influxdb-collectd-proxy
+.endif
+
 pre-clean:
 	@${RM} -r ${TMP_WRKDIR}
 
@@ -73,9 +89,16 @@ do-build:
 .endfor
 	@cd ${GO_WRKSRC}; \
 		${SETENV} CC=clang ${GO_ENV} ${GO_CMD} build -o influxdb ${GO_PKGNAME}/daemon
+.if ${PORT_OPTIONS:MCOLLECTD_PROXY}
+	@cd ${GO_WRKSRC}/../src/github.com/hoonmin/influxdb-collectd-proxy; \
+	        ${SETENV} CC=clang ${GO_ENV} ${GO_CMD} build -o bin/proxy
+.endif
 
 do-install:
 	@${INSTALL} -o root -g wheel -m 755 ${GO_WRKSRC}/influxdb ${STAGEDIR}${PREFIX}/bin/
+.if ${PORT_OPTIONS:MCOLLECTD_PROXY}
+	@${INSTALL} -o root -g wheel -m 755 ${GO_WRKSRC}/../src/github.com/hoonmin/influxdb-collectd-proxy/bin/proxy ${STAGEDIR}${PREFIX}/bin/influxdb-collectd-proxy
+.endif
 	@${MKDIR} ${STAGEDIR}${PREFIX}/etc/influxdb
 	@${INSTALL} -o root -g wheel -m 644 ${GO_WRKSRC}/configuration/config.toml ${STAGEDIR}${PREFIX}/etc/influxdb/
 	@${MKDIR} ${STAGEDIR}${PREFIX}/share/${PORTNAME}
@@ -95,7 +118,9 @@ ${TMP_WRKDIR}github.com/gorilla/mux \
 ${TMP_WRKDIR}github.com/gorilla/context \
 ${TMP_WRKDIR}github.com/influxdb/gomdb \
 ${TMP_WRKDIR}github.com/jmhodges/levigo \
-${TMP_WRKDIR}code.google.com/p/gogoprotobuf:
+${TMP_WRKDIR}code.google.com/p/gogoprotobuf \
+${TMP_WRKDIR}github.com/hoonmin/influxdb-collectd-proxy \
+${TMP_WRKDIR}github.com/paulhammond/gocollectd:
 	@${ECHO} "===> Fetching dependency ${@:S,${TMP_WRKDIR},,}"
 	@${MKDIR} $@
 	@git clone https://${@:S,${TMP_WRKDIR},,} ${@} 2>/dev/null

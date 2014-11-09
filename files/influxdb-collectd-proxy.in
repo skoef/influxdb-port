@@ -1,0 +1,43 @@
+#!/bin/sh
+#
+
+# PROVIDE: influxdb_collectd_proxy
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following line to /etc/rc.conf or /etc/rc.conf.d/influxdb_collectd_proxy
+# to configure influxdb-collectd-proxy.
+# influxdb_collectd_proxy_enable (bool):   Set to "NO" by default.
+#           Set it to "YES" to enable influxdb-collectd-proxy.
+# influxdb_collectd_proxy_flags (str):   Flags passed to influxdb-collectd-proxy on startup.
+#               Default is "".
+#
+
+. /etc/rc.subr
+
+name="influxdb_collectd_proxy"
+rcvar=influxdb_collectd_proxy_enable
+
+load_rc_config $name
+
+: ${influxdb_collectd_proxy_enable="NO"}
+: ${influxdb_collectd_proxy_flags=""}
+
+command="/usr/sbin/daemon"
+procname="%%PREFIX%%/bin/influxdb-collectd-proxy"
+command_args="-c -f -- ${procname} ${influxdb_collectd_proxy_flags}"
+
+start_cmd="start_cmd"
+start_cmd() {
+    _pid=$(check_process ${procname})
+    if [ ! -z "${_pid}" ]; then
+        echo 1>&2 "${name} already running? (pid=$_pid)."
+        return
+    fi
+
+    echo "Starting ${name}."
+    ${command} ${command_args}
+}
+
+run_rc_command "$1"
