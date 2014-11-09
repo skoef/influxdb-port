@@ -2,6 +2,7 @@
 
 PORTNAME=       influxdb
 PORTVERSION=    0.8.5
+PORTREVISION=   1
 CATEGORIES=     databases
 
 MAINTAINER=     reinier@skoef.nl
@@ -106,7 +107,6 @@ do-install:
 
 .include <bsd.port.pre.mk>
 .include "${PORTSDIR}/lang/go/files/bsd.go.mk"
-.include <bsd.port.post.mk>
 
 ${TMP_WRKDIR}github.com/rakyll/statik \
 ${TMP_WRKDIR}github.com/BurntSushi/toml \
@@ -137,3 +137,4 @@ ${TMP_WRKDIR}code.google.com/p/log4go:
 
 post-fetch: ${GO_DEPENDS:S,^,${TMP_WRKDIR},g}
 
+.include <bsd.port.post.mk>
