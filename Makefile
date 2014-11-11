@@ -20,13 +20,14 @@ GNU_CONFIGURE=  yes
 PKGORIGIN=      databases/influxdb
 USE_AUTOTOOLS=  autoconf
 
-LIB_DEPENDS+=   libleveldb.so:${PORTSDIR}/databases/leveldb
-BUILD_DEPENDS+= go:${PORTSDIR}/lang/go
-BUILD_DEPENDS+= protoc:${PORTSDIR}/devel/protobuf
-BUILD_DEPENDS+= protoc-gen-go:${PORTSDIR}/devel/goprotobuf
-FETCH_DEPENDS+= bzr:${PORTSDIR}/devel/bzr
-FETCH_DEPENDS+= git:${PORTSDIR}/devel/git
-FETCH_DEPENDS+= hg:${PORTSDIR}/devel/mercurial
+LIB_DEPENDS+=   libleveldb.so:${PORTSDIR}/databases/leveldb \
+				librocksdb.so:${PORTSDIR}/databases/rocksdb
+BUILD_DEPENDS+= go:${PORTSDIR}/lang/go \
+                protoc:${PORTSDIR}/devel/protobuf \
+                protoc-gen-go:${PORTSDIR}/devel/goprotobuf
+FETCH_DEPENDS+= bzr:${PORTSDIR}/devel/bzr \
+                git:${PORTSDIR}/devel/git \
+                hg:${PORTSDIR}/devel/mercurial
 
 USE_RC_SUBR=    influxdb
 
@@ -34,7 +35,8 @@ USES=			bison:build gmake
 
 GO_PKGNAME= github.com/influxdb/influxdb
 CGO_CFLAGS=-DMDB_DSYNC=O_SYNC
-TMP_WRKDIR= ${WRKDIR}/../work.tmp/src/
+CGO_LDFLAGS=-lrocksdb
+TMP_WRKDIR= ${WRKDIRPREFIX}${.CURDIR}/work.tmp/
 GO_DEPENDS= github.com/rakyll/statik \
 			github.com/BurntSushi/toml \
 			github.com/influxdb/go-cache \
@@ -78,8 +80,10 @@ post-extract:
 	@${RM} -r ${TMP_WRKDIR}
 
 pre-build:
-	${GMAKE} -C ${WRKSRC} build_version_string parser
-	cd ${WRKSRC}; \
+	@${GMAKE} -C ${WRKSRC} build_version_string parser
+	@${FIND} ${WRKDIR}/src/code.google.com/p/go.crypto -name '*.go' | \
+		${XARGS} ${SED} -i '' 's#golang.org/x/crypto#code.google.com/p/go.crypto#g'
+	@cd ${WRKSRC}; \
 		${RM} protocol/*.pb.go; \
 		${LOCALBASE}/bin/protoc --go_out=. protocol/*.proto
 
