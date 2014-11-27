@@ -1,32 +1,8 @@
---- Makefile.in.orig	2014-10-27 23:10:41.000000000 +0100
-+++ Makefile.in	2014-11-05 20:22:07.190539101 +0100
+--- Makefile.in.orig	2014-11-27 17:24:57.354664333 +0100
++++ Makefile.in	2014-11-27 17:25:05.015003333 +0100
 @@ -1,4 +1,4 @@
 -SHELL = /bin/bash
 +SHELL = /bin/sh
  
  ifeq ($(TMPDIR),)
  TMPDIR=/tmp
-@@ -95,7 +95,7 @@
- leveldb_file    = leveldb-$(leveldb_version).tar.gz
- leveldb_deps    = $(leveldb_dir)/libleveldb.a
- 
--cpp_47 = $(shell g++ -dumpversion | gawk '{print $$1>=4.7?"1":"0"}')
-+cpp_47 = 0
- ifneq ($(ROCKSDB_LIB),yes)
- rocksdb = yes
- ifneq ($(cpp_47),1)
-@@ -337,10 +337,10 @@
- 	cp tools/benchmark/benchmark_config.sample.toml build/benchmark_config.toml
- 	cp -R scripts/ build/
- 	cp config.sample.toml build/config.toml
--	sed -i 's/influxdb.log/\/opt\/influxdb\/shared\/log.txt/g' build/config.toml
--	sed -i 's:${TMPDIR}/influxdb/development/db:/opt/influxdb/shared/data/db:g' build/config.toml
--	sed -i 's:${TMPDIR}/influxdb/development/raft:/opt/influxdb/shared/data/raft:g' build/config.toml
--	sed -i 's:${TMPDIR}/influxdb/development/wal:/opt/influxdb/shared/data/wal:g' build/config.toml
-+	sed -i '' 's:influxdb.log:/var/log/influxdb.log:g' build/config.toml
-+	sed -i '' 's:${TMPDIR}/influxdb/development/db:/var/db/influxdb/db:g' build/config.toml
-+	sed -i '' 's:${TMPDIR}/influxdb/development/raft:/var/db/influxdb/raft:g' build/config.toml
-+	sed -i '' 's:${TMPDIR}/influxdb/development/wal:/var/db/influxdb/wal:g' build/config.toml
- 	rm -f build/scripts/post_install.sh.bak
- 	tar -czf $(binary_package) build/*
- 
