@@ -22,15 +22,15 @@ USE_AUTOTOOLS=  autoconf
 LIB_DEPENDS+=   libleveldb.so:${PORTSDIR}/databases/leveldb \
 				librocksdb.so:${PORTSDIR}/databases/rocksdb
 BUILD_DEPENDS+= go:${PORTSDIR}/lang/go \
-                protoc:${PORTSDIR}/devel/protobuf \
-                protoc-gen-go:${PORTSDIR}/devel/goprotobuf
+				protoc:${PORTSDIR}/devel/protobuf \
+				protoc-gen-go:${PORTSDIR}/devel/goprotobuf
 FETCH_DEPENDS+= bzr:${PORTSDIR}/devel/bzr \
-                git:${PORTSDIR}/devel/git \
-                hg:${PORTSDIR}/devel/mercurial
+				git:${PORTSDIR}/devel/git \
+				hg:${PORTSDIR}/devel/mercurial
 
 USE_RC_SUBR=    influxdb
 
-USES=			bison:build gmake
+USES=           bison:build gmake
 
 GO_PKGNAME= github.com/influxdb/influxdb
 CGO_CFLAGS=-DMDB_DSYNC=O_SYNC
@@ -53,7 +53,7 @@ GO_DEPENDS= github.com/rakyll/statik \
 			code.google.com/p/log4go
 
 OPTIONS_DEFINE= COLLECTD_PROXY
-OPTIONS_DEFAULT= COLLECTD_PROXY
+OPTIONS_DEFAULT=
 
 COLLECTD_PROXY_DESC= include collectdb-InfluxDB proxy
 
@@ -95,7 +95,7 @@ do-build:
 		${SETENV} CC=clang ${GO_ENV} ${GO_CMD} build -o influxdb ${GO_PKGNAME}/daemon
 .if ${PORT_OPTIONS:MCOLLECTD_PROXY}
 	@cd ${GO_WRKSRC}/../src/github.com/hoonmin/influxdb-collectd-proxy; \
-	        ${SETENV} CC=clang ${GO_ENV} ${GO_CMD} build -o bin/proxy
+		${SETENV} CC=clang ${GO_ENV} ${GO_CMD} build -o bin/proxy
 .endif
 
 do-install:
