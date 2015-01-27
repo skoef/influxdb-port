@@ -1,7 +1,7 @@
 # $FreeBSD: databases/influxdb/Makefile rschoof $
 
 PORTNAME=       influxdb
-PORTVERSION=    0.8.6
+PORTVERSION=    0.8.8
 CATEGORIES=     databases
 
 MAINTAINER=     reinier@skoef.nl
@@ -11,7 +11,7 @@ LICENSE=        MIT
 
 USE_GITHUB=     yes
 GH_ACCOUNT=     influxdb
-GH_COMMIT=      a0fd0cd
+GH_COMMIT=      afde71e
 GH_TAGNAME=     ${GH_COMMIT}
 
 GNU_CONFIGURE=  yes
